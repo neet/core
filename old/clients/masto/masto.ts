@@ -195,6 +195,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Account
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchAccount(id: string) {
@@ -206,6 +207,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Array of IdentityProof
    * @see https://github.com/tootsuite/mastodon/pull/10297
+   * @done
    */
   @available({ since: '2.8.0' })
   fetchAccountIdentityProofs(id: string) {
@@ -219,6 +221,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Token
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '2.7.0' })
   createAccount(params: CreateAccountParams) {
@@ -229,6 +232,7 @@ export class Masto extends GatewayImpl {
    * Test to make sure that the user token works.
    * @return the user's own Account with Source
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   verifyCredentials() {
@@ -240,6 +244,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return the user's own Account with Source
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   updateCredentials(params?: UpdateCredentialsParams) {
@@ -256,6 +261,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchAccountFollowers(id: string, params?: PaginationParams) {
@@ -271,6 +277,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchAccountFollowing(id: string, params?: PaginationParams) {
@@ -286,6 +293,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchAccountStatuses(id: string, params?: FetchAccountStatusesParams) {
@@ -301,6 +309,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   followAccount(id: string, params?: FollowAccountParams) {
@@ -312,6 +321,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   unfollowAccount(id: string) {
@@ -323,6 +333,7 @@ export class Masto extends GatewayImpl {
    * @param id Array of account IDs to check
    * @return Array of Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchAccountRelationships(id: string[]) {
@@ -336,6 +347,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   searchAccounts(params?: SearchAccountsParams) {
@@ -347,6 +359,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Returns App with `client_id` and `client_secret`
    * @see https://docs.joinmastodon.org/methods/apps/
+   * @done
    */
   @available({ since: '0.0.0' })
   createApp(params: CreateAppParams) {
@@ -357,6 +370,7 @@ export class Masto extends GatewayImpl {
    * Confirm that the app's OAuth2 credentials work.
    * @return Application
    * @see https://docs.joinmastodon.org/methods/apps/
+   * @done
    */
   @available({ since: '2.0.0' })
   verifyAppCredentials() {
@@ -368,6 +382,7 @@ export class Masto extends GatewayImpl {
    * @param params Array of Account
    * @return Query parameter
    * @see https://docs.joinmastodon.org/methods/accounts/blocks/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchBlocks(params?: PaginationParams) {
@@ -379,6 +394,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   blockAccount(id: string) {
@@ -390,6 +406,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   unblockAccount(id: string) {
@@ -400,6 +417,7 @@ export class Masto extends GatewayImpl {
    * Returns custom emojis that are available on the server.
    * @return Array of Emoji
    * @see https://docs.joinmastodon.org/methods/instance/custom_emojis/
+   * @done
    */
   @available({ since: '2.0.0' })
   fetchCustomEmojis() {
@@ -411,6 +429,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of strings
    * @see https://docs.joinmastodon.org/methods/accounts/domain_blocks/
+   * @done
    */
   @available({ since: '1.4.0' })
   fetchDomainBlocks(params?: PaginationParams) {
@@ -428,6 +447,7 @@ export class Masto extends GatewayImpl {
    * - prevent following new users from it (but does not remove existing follows)
    * @param domain Domain to block.
    * @return N/A
+   * @done
    * @see https://docs.joinmastodon.org/methods/accounts/domain_blocks/
    */
   @available({ since: '1.4.0' })
@@ -441,6 +461,7 @@ export class Masto extends GatewayImpl {
    * Remove a domain block, if it exists in the user's array of blocked domains.
    * @param domain Domain to unblock
    * @return N/A
+   * @done
    * @see https://docs.joinmastodon.org/methods/accounts/domain_blocks/
    */
   @available({ since: '1.4.0' })
@@ -454,6 +475,7 @@ export class Masto extends GatewayImpl {
    * Accounts that the user is currently featuring on their profile.
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/endorsements/
+   * @done
    */
   @available({ since: '2.5.0' })
   fetchEndorsements(params?: PaginationParams) {
@@ -468,6 +490,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '2.5.0' })
   pinAccount(id: string) {
@@ -479,6 +502,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '2.5.0' })
   unpinAccount(id: string) {
@@ -490,6 +514,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/accounts/favourites/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchFavourites(params?: PaginationParams) {
@@ -501,6 +526,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   favouriteStatus(id: string) {
@@ -512,6 +538,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   unfavouriteStatus(id: string) {
@@ -522,6 +549,7 @@ export class Masto extends GatewayImpl {
    * View all filters
    * @return Filter
    * @see https://docs.joinmastodon.org/methods/accounts/filters/
+   * @done
    */
   @available({ since: '2.4.3' })
   fetchFilters() {
@@ -533,6 +561,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the filter
    * @return Returns Filter
    * @see https://docs.joinmastodon.org/methods/accounts/filters/
+   * @done
    */
   @available({ since: '2.4.3' })
   fetchFilter(id: string) {
@@ -544,6 +573,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Filter
    * @see https://docs.joinmastodon.org/methods/accounts/filters/
+   * @done
    */
   @available({ since: '2.4.3' })
   createFilter(params?: ModifyFilterParams) {
@@ -556,6 +586,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Filter
    * @see https://docs.joinmastodon.org/methods/accounts/filters/
+   * @done
    */
   @available({ since: '2.4.3' })
   updateFilter(id: string, params?: ModifyFilterParams) {
@@ -567,6 +598,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the filter in the database
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/accounts/filters/
+   * @done
    */
   @available({ since: '2.4.3' })
   removeFilter(id: string) {
@@ -578,6 +610,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/follow_requests/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchFollowRequests(params?: PaginationParams) {
@@ -592,6 +625,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/follow_requests/
+   * @done
    */
   @available({ since: '0.0.0' })
   authorizeFollowRequest(id: string) {
@@ -603,6 +637,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/follow_requests/
+   * @done
    */
   @available({ since: '0.0.0' })
   rejectFollowRequest(id: string) {
@@ -614,6 +649,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
+   * @done
    */
   @available({ since: '2.4.3' })
   fetchSuggestions(params?: PaginationParams) {
@@ -628,6 +664,7 @@ export class Masto extends GatewayImpl {
    * @param id id of the account in the database to be removed from suggestions
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
+   * @done
    */
   @available({ since: '2.4.3' })
   removeSuggestion(id: string) {
@@ -638,6 +675,7 @@ export class Masto extends GatewayImpl {
    * Information about the server.
    * @return Instance
    * @see https://docs.joinmastodon.org/methods/instance/
+   * @done
    */
   @available({ since: '1.0.0' })
   fetchInstance() {
@@ -648,6 +686,7 @@ export class Masto extends GatewayImpl {
    * Domains that this instance is aware of.
    * @return Array of Activity
    * @see https://docs.joinmastodon.org/methods/instance/
+   * @done
    */
   @available({ since: '2.1.2' })
   fetchInstancesPeers() {
@@ -658,6 +697,7 @@ export class Masto extends GatewayImpl {
    * Instance activity over the last 3 months, binned weekly.
    * @return Array of Activity
    * @see https://docs.joinmastodon.org/methods/instance/
+   * @done
    */
   @available({ since: '2.1.2' })
   fetchInstanceActivity() {
@@ -668,6 +708,7 @@ export class Masto extends GatewayImpl {
    * Fetch all lists that the user owns.
    * @return Array of List
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   fetchLists() {
@@ -679,6 +720,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the list in the database
    * @return Array of List
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   fetchAccountLists(id: string) {
@@ -690,6 +732,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the list in the database
    * @return List
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   fetchList(id: string) {
@@ -701,6 +744,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return List
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   createList(params: ModifyListParams) {
@@ -713,6 +757,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return List
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   updateList(id: string, params: ModifyListParams) {
@@ -724,6 +769,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the list in the database
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   removeList(id: string) {
@@ -736,6 +782,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   fetchListAccounts(id: string, params?: PaginationParams) {
@@ -751,6 +798,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   addAccountToList(id: string, params: ModifyListAccountsParams) {
@@ -763,6 +811,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/timelines/lists/
+   * @done
    */
   @available({ since: '2.1.0' })
   removeAccountFromList(id: string, params: ModifyListAccountsParams) {
@@ -774,6 +823,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Attachment
    * @see https://docs.joinmastodon.org/methods/statuses/media/
+   * @done
    */
   @available({ since: '0.0.0' })
   createMediaAttachment(params: CreateMediaAttachmentParams) {
@@ -787,6 +837,7 @@ export class Masto extends GatewayImpl {
    * Fetches an attachment to be used with a new status.
    * @param id ID of the attachment
    * @see https://github.com/tootsuite/mastodon/pull/13210
+   * @done
    */
   @available({ since: '3.1.3' })
   fetchMediaAttachment(id: string) {
@@ -799,6 +850,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Attachment
    * @see https://docs.joinmastodon.org/api/rest/media/#put-api-v1-media-id
+   * @done
    */
   @available({ since: '0.0.0' })
   updateMediaAttachment(id: string, params: UpdateMediaAttachmentParams) {
@@ -810,6 +862,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/accounts/mutes/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchMutes(params?: PaginationParams) {
@@ -822,6 +875,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameter
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   muteAccount(id: string, params?: MuteAccountParams) {
@@ -833,6 +887,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the account in the database
    * @return Relationship
    * @see https://docs.joinmastodon.org/methods/accounts/
+   * @done
    */
   @available({ since: '0.0.0' })
   unmuteAccount(id: string) {
@@ -844,6 +899,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '1.4.2' })
   muteStatus(id: string) {
@@ -855,6 +911,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '1.4.2' })
   unmuteStatus(id: string) {
@@ -868,6 +925,7 @@ export class Masto extends GatewayImpl {
    * @param params Query parameter
    * @return Array of Notification
    * @see https://docs.joinmastodon.org/methods/notifications/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchNotifications(params?: FetchNotificationsParams) {
@@ -882,6 +940,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the notification in the database.
    * @return Notification
    * @see https://docs.joinmastodon.org/methods/notifications/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchNotification(id: string) {
@@ -892,6 +951,7 @@ export class Masto extends GatewayImpl {
    * Clear all notifications from the server.
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/notifications/
+   * @done
    */
   @available({ since: '0.0.0' })
   clearNotifications() {
@@ -903,6 +963,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the notification to be cleared
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/notifications/
+   * @done
    */
   @available({ since: '2.6.0' })
   dismissNotification(id: string) {
@@ -916,6 +977,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Returns Push Subscription
    * @see https://docs.joinmastodon.org/methods/notifications/push/
+   * @done
    */
   @available({ since: '2.4.0' })
   createPushSubscription(params: CreatePushSubscriptionParams) {
@@ -926,6 +988,7 @@ export class Masto extends GatewayImpl {
    * View the PushSubscription currently associated with this access token.
    * @return PushSubscription
    * @see https://docs.joinmastodon.org/methods/notifications/push/
+   * @done
    */
   @available({ since: '2.4.0' })
   fetchPushSubscription() {
@@ -937,6 +1000,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return PushSubscription
    * @see https://docs.joinmastodon.org/methods/notifications/push/
+   * @done
    */
   @available({ since: '2.4.0' })
   updatePushSubscription(params: UpdatePushSubscriptionParams) {
@@ -947,6 +1011,7 @@ export class Masto extends GatewayImpl {
    * Removes the current Web Push API subscription.
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/notifications/push/
+   * @done
    */
   @available({ since: '2.4.0' })
   removePushSubscription() {
@@ -958,6 +1023,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the poll in the database
    * @return Poll
    * @see https://docs.joinmastodon.org/methods/statuses/polls/
+   * @done
    */
   @available({ since: '2.8.0' })
   fetchPoll(id: string) {
@@ -970,6 +1036,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Poll
    * @see https://docs.joinmastodon.org/methods/statuses/polls/
+   * @done
    */
   @available({ since: '2.8.0' })
   votePoll(id: string, params: VotePollParams) {
@@ -1055,6 +1122,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchStatus(id: string) {
@@ -1066,6 +1134,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Context
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchStatusContext(id: string) {
@@ -1077,6 +1146,7 @@ export class Masto extends GatewayImpl {
    * @deprecated Use `card` attribute of status instead
    * @param id ID of the status in the database
    * @return Card
+   * @done
    * @see https://docs.joinmastodon.org/api/rest/statuses/#get-api-v1-statuses-id-card
    */
   @available({ since: '0.0.0', until: '2.9.3' })
@@ -1089,6 +1159,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchStatusRebloggedBy(id: string) {
@@ -1100,6 +1171,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchStatusFavouritedBy(id: string) {
@@ -1112,6 +1184,7 @@ export class Masto extends GatewayImpl {
    * @param idempotencyKey Prevent duplicate submissions of the same status. Idempotency keys are stored for up to 1 hour, and can be any arbitrary string. Consider using a hash or UUID generated client-side.
    * @return Status. When scheduled_at is present, ScheduledStatus is returned instead.
    * @see https://docs.joinmastodon.org/api/rest/statuses/#post-api-v1-statuses
+   * @done
    */
   @available({ since: '0.0.0' })
   createStatus(params: CreateStatusParams, idempotencyKey?: string) {
@@ -1129,6 +1202,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database. Must be owned by authenticated account.
    * @return Status with source text and `media_attachments` or `poll`
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   removeStatus(id: string) {
@@ -1140,6 +1214,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/api/rest/statuses/#post-api-v1-statuses-id-reblog
+   * @done
    */
   @available({ since: '0.0.0' })
   reblogStatus(id: string, params?: ReblogStatusParams) {
@@ -1151,6 +1226,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '0.0.0' })
   unreblogStatus(id: string) {
@@ -1162,6 +1238,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database. The status should be public and authored by the authorized account.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '1.6.0' })
   pinStatus(id: string) {
@@ -1173,6 +1250,7 @@ export class Masto extends GatewayImpl {
    * @param id Local ID of a status in the database.
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '1.6.0' })
   unpinStatus(id: string) {
@@ -1184,6 +1262,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Statuses
    * @see https://docs.joinmastodon.org/methods/accounts/bookmarks/
+   * @done
    */
   @available({ since: '3.1.0' })
   fetchBookmarks(params?: PaginationParams) {
@@ -1195,6 +1274,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the status in the database
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '3.1.0' })
   bookmarkStatus(id: string) {
@@ -1206,6 +1286,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the status in the database
    * @return Status
    * @see https://docs.joinmastodon.org/methods/statuses/
+   * @done
    */
   @available({ since: '3.1.0' })
   unbookmarkStatus(id: string) {
@@ -1217,6 +1298,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/timelines/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchHomeTimeline(params?: FetchTimelineParams) {
@@ -1231,6 +1313,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/timelines/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchPublicTimeline(params?: FetchTimelineParams) {
@@ -1245,6 +1328,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/timelines/
+   * @done
    */
   @available({ since: '0.0.0' })
   fetchTagTimeline(hashtag: string, params?: FetchTimelineParams) {
@@ -1260,6 +1344,7 @@ export class Masto extends GatewayImpl {
    * @param params Query parameter
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/timelines/
+   * @done
    */
   @available({ since: '2.1.0' })
   fetchListTimeline(id: string, params?: FetchTimelineParams) {
@@ -1274,6 +1359,7 @@ export class Masto extends GatewayImpl {
    * @deprecated Use conversations API instead
    * @return Array of Status
    * @see https://docs.joinmastodon.org/methods/timelines/
+   * @done
    */
   @available({ since: '0.0.0', until: '2.9.3' })
   fetchDirectTimeline(params?: FetchTimelineParams) {
@@ -1474,6 +1560,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the account
    * @param param Parameters
    * @return Relationship
+   * @done
    */
   @available({ since: '3.2.0' })
   createAccountNote(id: string, params: CreateAccountNoteParams) {
@@ -1484,6 +1571,7 @@ export class Masto extends GatewayImpl {
    * Get featured tag of the account
    * @param id ID of the account
    * @return FeaturedTags
+   * @done
    */
   @available({ since: '3.3.0' })
   fetchAccountFeaturedTags(id: string) {
