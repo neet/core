@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unassigned-import
 import 'isomorphic-form-data';
 
-import { isObject } from './is-object';
+import { isObject } from './serializer-impl';
 
 /**
  * Encode nested object to form-data compatible flat object

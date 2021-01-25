@@ -53,13 +53,7 @@ export interface SearchParams extends DefaultPaginationParams {
 }
 
 export class FacadeRepositories {
-  static async login() {
-    const http = ({} as unknown) as Http;
-    const version = '1.0.0';
-    return new FacadeRepositories(http, version);
-  }
-
-  private constructor(readonly http: Http, readonly version: string) {}
+  constructor(readonly http: Http, readonly version: string) {}
 
   readonly accounts = new AccountRepository(this.http, this.version);
 
@@ -146,3 +140,9 @@ export class FacadeRepositories {
     );
   }
 }
+
+export const login = async () => {
+  const http = ({} as unknown) as Http;
+  const version = '1.0.0';
+  return new FacadeRepositories(http, version);
+};

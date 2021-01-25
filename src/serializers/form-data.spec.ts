@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-unassigned-import
 import 'isomorphic-form-data';
-import { createFormData } from '../create-form-data';
+
+import { createFormData } from './form-data';
 
 /**
  * Unfortunately form-data node.js package doesn't have
