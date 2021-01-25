@@ -1,22 +1,30 @@
-export type Payload = {};
+export type Headers = { readonly [key: string]: unknown };
+export type Body = unknown;
+
+export type Request = {
+  readonly path?: string;
+  readonly method?: 'get' | 'post' | 'patch' | 'delete' | 'put' | 'options';
+  readonly headers?: Headers;
+  readonly body?: Body;
+};
+
+export type Response<T> = {
+  readonly headers: Headers;
+  readonly data: T;
+};
+
+export type Method = <T>(
+  path: string,
+  body?: Body,
+  request?: Request,
+) => Promise<T>;
 
 export interface Http {
   readonly baseURL: string;
-  readonly get: <T>(path: string, query?: Payload) => Promise<T>;
-  readonly post: <T>(
-    path: string,
-    body?: Payload,
-    initiator?: Payload,
-  ) => Promise<T>;
-  readonly put: <T>(path: string, body?: Payload) => Promise<T>;
-
-  readonly patch: <T>(
-    path: string,
-    body?: Payload,
-    initiator?: Payload,
-  ) => Promise<T>;
-
-  readonly delete: <T>(path: string, body?: Payload) => Promise<T>;
+  readonly request: <T>(request: Request) => Promise<Response<T>>;
+  readonly get: Method;
+  readonly post: Method;
+  readonly patch: Method;
+  readonly put: Method;
+  readonly delete: Method;
 }
-
-export type Method = <T>(http: Http) => T;

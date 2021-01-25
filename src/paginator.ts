@@ -1,4 +1,5 @@
 import { Http } from './http';
+import { Response } from './http/http';
 
 /**
  * Argument of `Gateway.paginate().next()`.
@@ -37,10 +38,13 @@ export class Paginator<Params, Result> implements AsyncIterable<Result> {
     let nextParams = this.params;
 
     while (nextUrl) {
-      const response: any = await this.http.request(nextUrl, nextParams);
+      const response: Response<Result> = await this.http.request({
+        path: nextUrl,
+        body: nextParams,
+      });
 
       // Yield will be argument of next()
-      const params = yield response;
+      const params = yield response.data;
 
       if (params?.reset) {
         nextUrl = this.url;
@@ -48,7 +52,7 @@ export class Paginator<Params, Result> implements AsyncIterable<Result> {
         continue;
       }
 
-      nextUrl = params?.url ?? this.pluckNext(response.headers?.link);
+      nextUrl = params?.url ?? this.pluckNext(response.headers?.link as string);
       nextParams = params?.params;
     }
   }

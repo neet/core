@@ -10,12 +10,16 @@ import {
   MastoUnprocessableEntityError,
 } from '../errors';
 import { Serializer } from '../serializers';
-import { Http, Payload } from './http';
+import { Body, Http, Request, Response } from './http';
 
 export class HttpAxiosImpl implements Http {
   private readonly axios: AxiosInstance;
 
-  constructor(readonly baseURL: string, readonly serializer: Serializer) {
+  constructor(
+    readonly baseURL: string,
+    readonly serializer: Serializer,
+    readonly config: AxiosRequestConfig = {},
+  ) {
     this.axios = axios.create({
       baseURL,
       transformRequest: (data, headers) =>
@@ -24,12 +28,18 @@ export class HttpAxiosImpl implements Http {
         this.serializer.deserialize(headers['Content-Type'], data),
       paramsSerializer: (params) =>
         this.serializer.serialize('application/json', params) as string,
+      ...config,
     });
   }
 
-  request<T>(options: AxiosRequestConfig) {
+  async request<T>(params: Request): Promise<Response<T>> {
     try {
-      return this.axios.request<T>(options);
+      const response = await this.axios.request<T>(params);
+
+      return {
+        headers: response.headers,
+        data: response.data,
+      };
     } catch (error) {
       if (!axios.isAxiosError(error)) {
         throw error;
@@ -60,43 +70,48 @@ export class HttpAxiosImpl implements Http {
     }
   }
 
-  get<T>(path: string, params?: Payload): Promise<T> {
+  get<T>(path: string, body?: Body, init: Request = {}): Promise<T> {
     return this.request({
       method: 'get',
-      url: path,
-      params,
+      path,
+      body,
+      ...init,
     }).then((response) => response.data as T);
   }
 
-  post<T>(path: string, data?: Payload): Promise<T> {
+  post<T>(path: string, body?: Body, init: Request = {}): Promise<T> {
     return this.request({
       method: 'post',
-      url: path,
-      data,
+      path,
+      body,
+      ...init,
     }).then((response) => response.data as T);
   }
 
-  delete<T>(path: string, data?: Payload): Promise<T> {
+  delete<T>(path: string, body?: Body, init: Request = {}): Promise<T> {
     return this.request({
       method: 'delete',
-      url: path,
-      data,
+      path,
+      body,
+      ...init,
     }).then((response) => response.data as T);
   }
 
-  put<T>(path: string, data?: Payload): Promise<T> {
+  put<T>(path: string, body?: Body, init: Request = {}): Promise<T> {
     return this.request({
       method: 'put',
-      url: path,
-      data,
+      path,
+      body,
+      ...init,
     }).then((response) => response.data as T);
   }
 
-  patch<T>(path: string, data?: Payload): Promise<T> {
+  patch<T>(path: string, body?: Body, init: Request = {}): Promise<T> {
     return this.request({
       method: 'patch',
-      url: path,
-      data,
+      path,
+      body,
+      ...init,
     }).then((response) => response.data as T);
   }
 }
