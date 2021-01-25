@@ -1,8 +1,8 @@
 import { version } from '../../decorators';
+import { Status } from '../../entities';
 import { Http } from '../../http';
 import { Paginator } from '../../paginator';
 import { DefaultPaginationParams, Repository } from '../../repository';
-import { Status } from '../statuses/status';
 
 export class FavouriteRepository implements Repository<Status> {
   constructor(private readonly http: Http, readonly version: string) {}

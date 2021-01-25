@@ -23,6 +23,10 @@ export class Paginator<Params, Result> implements AsyncIterable<Result> {
     private readonly params?: Params,
   ) {}
 
+  private pluckNext = (link: string) => {
+    return link?.match(/<(.+?)>; rel="next"/)?.[1];
+  };
+
   // stub
   async *[Symbol.asyncIterator](): AsyncGenerator<
     Result,
@@ -33,22 +37,19 @@ export class Paginator<Params, Result> implements AsyncIterable<Result> {
     let nextParams = this.params;
 
     while (nextUrl) {
-      const response = await this.http.get<any>(nextUrl, nextParams);
+      const response: any = await this.http.get(nextUrl, nextParams);
 
       // Yield will be argument of next()
-      const options = yield response.data;
-      // Get next URL from "next" in the link header
-      const linkHeaderNext = response.headers?.link?.match(
-        /<(.+?)>; rel="next"/,
-      )?.[1];
+      const params = yield response.data;
 
-      if (options?.reset) {
+      if (params?.reset) {
         nextUrl = this.url;
         nextParams = this.params;
-      } else {
-        nextUrl = options?.url ?? linkHeaderNext;
-        nextParams = options?.params;
+        continue;
       }
+
+      nextUrl = params?.url ?? this.pluckNext(response.headers?.link);
+      nextParams = params?.params;
     }
   }
 }

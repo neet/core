@@ -19,17 +19,25 @@ const fromEntries = <T>(entries: [string, unknown][]) => {
 
 // prettier-ignore
 export const transformKeys = <T>(
-    data: Record<string, unknown>,
-    transform: (key: string) => string,
-  ): T => fromEntries<T>(
+  data: Record<string, unknown>,
+  transform: (key: string) => string,
+): T => {
+  if (Array.isArray(data)) {
+    return data.map((value) => transformKeys(value, transform)) as unknown as T;
+  }
+  
+  return fromEntries<T>(
     Object.entries(data).map(([key, value]) => [
       transform(key),
       isObject(value) ? transformKeys(value, transform) : value,
     ] as [string, T[keyof T]]),
   );
+}
 
 export class SerializerImpl implements Serializer {
   serialize(type: MimeType, data: Record<string, unknown>): unknown {
+    if (data == null) return;
+
     const casedData = transformKeys(data, snakeCase);
 
     if (type === 'application/json') {
@@ -40,14 +48,10 @@ export class SerializerImpl implements Serializer {
       return createFormData(casedData);
     }
 
-    throw new Error(`Unexpected mime type ${type}`);
+    return;
   }
 
-  deserialize(type: MimeType, data: string): Record<string, unknown> {
-    if (type === 'application/json') {
-      return transformKeys(JSON.parse(data), camelCase);
-    }
-
-    throw new Error(`Unexpected mime type ${type}`);
+  deserialize(_type: MimeType, data: string): Record<string, unknown> {
+    return transformKeys(JSON.parse(data), camelCase);
   }
 }

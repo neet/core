@@ -28,6 +28,8 @@ export class MarkerRepository
    * @see https://docs.joinmastodon.org/methods/timelines/markers/
    */
   @version({ since: '3.0.0' })
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   fetch(params?: FetchMarkersParams): Promise<Marker> {
     return this.http.get('/api/v1/markers', params);
   }

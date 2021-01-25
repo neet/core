@@ -32,8 +32,10 @@ import { DirectoryRepository } from './aggregations/directory';
 import { version } from './decorators';
 import { Results } from './entities';
 import { Http } from './http';
+import { HttpAxiosImpl } from './http/http-axios-impl';
 import { Paginator } from './paginator';
 import { DefaultPaginationParams } from './repository';
+import { SerializerImpl } from './serializers';
 
 export type SearchType = 'accounts' | 'hashtags' | 'statuses';
 
@@ -141,8 +143,8 @@ export class FacadeRepositories {
   }
 }
 
-export const login = async () => {
-  const http = ({} as unknown) as Http;
+export const login = async (url: string): Promise<FacadeRepositories> => {
+  const http = new HttpAxiosImpl(url, new SerializerImpl());
   const version = '1.0.0';
   return new FacadeRepositories(http, version);
 };
