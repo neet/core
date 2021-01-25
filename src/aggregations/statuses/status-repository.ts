@@ -1,12 +1,62 @@
 import { deprecated, version } from '../../decorators';
+import { Account, Card, Context, Status } from '../../entities';
 import { Http } from '../../http';
-import { Account } from '../accounts';
-import { Card } from './card';
-import { Context } from './context';
-import { Status } from './status';
-import type { CreateStatusParams, ReblogStatusParams } from './statuses-params';
+import { Repository } from '../../repository';
 
-export class StatusController {
+export type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct';
+
+export interface CreateStatusParamsBase {
+  /** ID of the status being replied to, if status is a reply */
+  readonly inReplyToId?: string | null;
+  /** Mark status and attached media as sensitive? */
+  readonly sensitive?: boolean | null;
+  /** Text to be shown as a warning or subject before the actual content. Statuses are generally collapsed behind this field. */
+  readonly spoilerText?: string | null;
+  /** Visibility of the posted status. Enumerable oneOf public, unlisted, private, direct. */
+  readonly visibility?: StatusVisibility | null;
+  /** ISO 8601 Date-time at which to schedule a status. Providing this paramter will cause ScheduledStatus to be returned instead of Status. Must be at least 5 minutes in the future. */
+  readonly scheduledAt?: string | null;
+  /** ISO 639 language code for this status. */
+  readonly language?: string | null;
+}
+
+export interface CreateStatusPollParam {
+  /** Array of possible answers. If provided, `media_ids` cannot be used, and `poll[expires_in]` must be provided. */
+  readonly options: string[];
+  /** Duration the poll should be open, in seconds. If provided, media_ids cannot be used, and poll[options] must be provided. */
+  readonly expiresIn: number;
+  /** Allow multiple choices? */
+  readonly multiple?: boolean | null;
+  /** Hide vote counts until the poll ends? */
+  readonly hideTotals?: boolean | null;
+}
+
+export interface CreateStatusParamsWithStatus extends CreateStatusParamsBase {
+  /** Text content of the status. If `media_ids` is provided, this becomes optional. Attaching a `poll` is optional while `status` is provided. */
+  readonly status: string;
+  /** Array of Attachment ids to be attached as media. If provided, `status` becomes optional, and `poll` cannot be used. */
+  readonly mediaIds?: string[] | null;
+  readonly poll?: CreateStatusPollParam | null;
+}
+
+export interface CreateStatusParamsWithMediaIds extends CreateStatusParamsBase {
+  /** Array of Attachment ids to be attached as media. If provided, `status` becomes optional, and `poll` cannot be used. */
+  readonly mediaIds: string[] | null;
+  /** Text content of the status. If `media_ids` is provided, this becomes optional. Attaching a `poll` is optional while `status` is provided. */
+  readonly status?: string | null;
+  readonly poll?: never;
+}
+
+export type CreateStatusParams =
+  | CreateStatusParamsWithStatus
+  | CreateStatusParamsWithMediaIds;
+
+export interface ReblogStatusParams {
+  /** any visibility except limited or direct (i.e. public, unlisted, private). Defaults to public. Currently unused in UI. */
+  readonly visibility: StatusVisibility;
+}
+
+export class StatusRepository implements Repository<Status> {
   constructor(private readonly http: Http, readonly version: string) {}
 
   /**
@@ -16,8 +66,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  fetch(id: string) {
-    return this.http.get<Status>(`/api/v1/statuses/${id}`);
+  fetch(id: string): Promise<Status> {
+    return this.http.get(`/api/v1/statuses/${id}`);
   }
 
   /**
@@ -28,14 +78,14 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/api/rest/statuses/#post-api-v1-statuses
    */
   @version({ since: '0.0.0' })
-  create(params: CreateStatusParams, idempotencyKey?: string) {
+  create(params: CreateStatusParams, idempotencyKey?: string): Promise<Status> {
     if (idempotencyKey) {
-      return this.http.post<Status>('/api/v1/statuses', params, {
+      return this.http.post('/api/v1/statuses', params, {
         headers: { 'Idempotency-Key': idempotencyKey },
       });
     }
 
-    return this.http.post<Status>('/api/v1/statuses', params);
+    return this.http.post('/api/v1/statuses', params);
   }
 
   /**
@@ -45,8 +95,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  remove(id: string) {
-    return this.http.delete<Status>(`/api/v1/statuses/${id}`);
+  remove(id: string): Promise<Status> {
+    return this.http.delete(`/api/v1/statuses/${id}`);
   }
 
   /**
@@ -56,8 +106,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  fetchContext(id: string) {
-    return this.http.get<Context>(`/api/v1/statuses/${id}/context`);
+  fetchContext(id: string): Promise<Context> {
+    return this.http.get(`/api/v1/statuses/${id}/context`);
   }
 
   /**
@@ -69,8 +119,8 @@ export class StatusController {
    */
   @deprecated('Use `card` attribute of status instead')
   @version({ since: '0.0.0', until: '2.9.3' })
-  fetchCard(id: string) {
-    return this.http.get<Card>(`/api/v1/statuses/${id}/card`);
+  fetchCard(id: string): Promise<Card> {
+    return this.http.get(`/api/v1/statuses/${id}/card`);
   }
 
   /**
@@ -80,8 +130,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  favourite(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/favourite`);
+  favourite(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/favourite`);
   }
 
   /**
@@ -91,8 +141,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  unfavourite(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/unfavourite`);
+  unfavourite(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/unfavourite`);
   }
 
   /**
@@ -102,8 +152,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '1.4.2' })
-  mute(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/mute`);
+  mute(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/mute`);
   }
 
   /**
@@ -113,8 +163,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '1.4.2' })
-  unmute(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/unmute`);
+  unmute(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/unmute`);
   }
 
   /**
@@ -124,8 +174,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  fetchRebloggedBy(id: string) {
-    return this.http.get<Account[]>(`/api/v1/statuses/${id}/reblogged_by`);
+  fetchRebloggedBy(id: string): Promise<Account[]> {
+    return this.http.get(`/api/v1/statuses/${id}/reblogged_by`);
   }
 
   /**
@@ -135,8 +185,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  fetchFavouritedBy(id: string) {
-    return this.http.get<Account[]>(`/api/v1/statuses/${id}/favourited_by`);
+  fetchFavouritedBy(id: string): Promise<Account[]> {
+    return this.http.get(`/api/v1/statuses/${id}/favourited_by`);
   }
 
   /**
@@ -146,8 +196,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/api/rest/statuses/#post-api-v1-statuses-id-reblog
    */
   @version({ since: '0.0.0' })
-  reblog(id: string, params?: ReblogStatusParams) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/reblog`, params);
+  reblog(id: string, params?: ReblogStatusParams): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/reblog`, params);
   }
 
   /**
@@ -157,8 +207,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '0.0.0' })
-  unreblog(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/unreblog`);
+  unreblog(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/unreblog`);
   }
 
   /**
@@ -168,8 +218,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '1.6.0' })
-  pin(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/pin`);
+  pin(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/pin`);
   }
 
   /**
@@ -179,8 +229,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '1.6.0' })
-  unpin(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/unpin`);
+  unpin(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/unpin`);
   }
 
   /**
@@ -190,8 +240,8 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '3.1.0' })
-  bookmark(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/bookmark`);
+  bookmark(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/bookmark`);
   }
 
   /**
@@ -201,7 +251,7 @@ export class StatusController {
    * @see https://docs.joinmastodon.org/methods/statuses/
    */
   @version({ since: '3.1.0' })
-  unbookmark(id: string) {
-    return this.http.post<Status>(`/api/v1/statuses/${id}/unbookmark`);
+  unbookmark(id: string): Promise<Status> {
+    return this.http.post(`/api/v1/statuses/${id}/unbookmark`);
   }
 }

@@ -10,14 +10,13 @@ import type {
 } from '../../entities';
 import { Http } from '../../http';
 import { Paginator } from '../../paginator';
-import { Repository } from '../../repository';
+import { DefaultPaginationParams, Repository } from '../../repository';
 import type {
   CreateAccountNoteParams,
   CreateAccountParams,
   FetchAccountStatusesParams,
   FollowAccountParams,
   MuteAccountParams,
-  PaginationParams,
   SearchAccountsParams,
   UpdateCredentialsParams,
 } from './account-params';
@@ -85,7 +84,7 @@ export class AccountRepository
   @version({ since: '0.0.0' })
   getFollowersIterable(
     id: string,
-    params: PaginationParams,
+    params: DefaultPaginationParams,
   ): AsyncIterable<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
@@ -104,7 +103,7 @@ export class AccountRepository
   @version({ since: '0.0.0' })
   getFollowingIterable(
     id: string,
-    params: PaginationParams,
+    params: DefaultPaginationParams,
   ): AsyncIterable<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,

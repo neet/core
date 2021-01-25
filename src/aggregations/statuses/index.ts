@@ -5,4 +5,5 @@ export type {
   CreateStatusParamsWithMediaIds,
   CreateStatusParamsWithStatus,
   CreateStatusPollParam,
-} from './statuses-params';
+} from './status-repository';
+export { StatusRepository } from './status-repository';

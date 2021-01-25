@@ -1,4 +1,4 @@
-export { AccountRepository } from './account-controller';
+export { AccountRepository } from './account-repository';
 export type {
   CreateAccountParams,
   CreateAccountNoteParams,

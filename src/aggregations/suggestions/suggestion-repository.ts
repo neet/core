@@ -1,9 +1,9 @@
 import { version } from '../../decorators';
 import { Http } from '../../http';
 import { Paginator } from '../../paginator';
-import { PaginationParams } from '../accounts/account-params';
+import { DefaultPaginationParams } from '../../repository';
 
-export class SuggestionController {
+export class SuggestionRepository {
   constructor(private readonly http: Http, readonly version: string) {}
 
   async *[Symbol.asyncIterator]() {
@@ -17,7 +17,7 @@ export class SuggestionController {
    * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
    */
   @version({ since: '2.4.3' })
-  getIterator(params?: PaginationParams) {
+  getIterator(params?: DefaultPaginationParams): AsyncIterable<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
       '/api/v1/suggestions',
@@ -32,7 +32,7 @@ export class SuggestionController {
    * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
    */
   @version({ since: '2.4.3' })
-  remove(id: string) {
-    return this.http.delete<void>(`/api/v1/suggestions/${id}`);
+  remove(id: string): Promise<void> {
+    return this.http.delete(`/api/v1/suggestions/${id}`);
   }
 }

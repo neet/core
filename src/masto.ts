@@ -1,42 +1,43 @@
-import { AccountController } from './aggregations/accounts';
-import { PaginationParams } from './aggregations/accounts/account-params';
-import { AnnouncementRepository } from './aggregations/announcements/announcement-repository';
-import { AppController } from './aggregations/apps/app-repository';
-import { BlockController } from './aggregations/blocks/block-controller';
-import { BookmarkController } from './aggregations/bookmarks/bookmark-repository';
-import { ConversationRepository } from './aggregations/conversations/conversation-repository';
-import { CustomEmojiController } from './aggregations/custom-emojis/custom-emoji-repository';
-import { DirectoryRepository } from './aggregations/directory/directory-repository';
-import { DomainBlockController } from './aggregations/domain-block/domain-block-repository';
-import { EndorsementsController } from './aggregations/endorsements/endorsement-repository';
-import { FavouritesController } from './aggregations/favourites/favourite-repository';
-import { FeaturedTagRepository } from './aggregations/featured-tags/featured-tag-repository';
-import { FilterController } from './aggregations/filters/filter-repository';
-import { FollowRequestController } from './aggregations/follow-requests/follow-request-repository';
-import { InstanceController } from './aggregations/instances/instance-repository';
-import { ListController } from './aggregations/lists/list-repository';
-import { MarkerRepository } from './aggregations/markers/marker-repository';
-import { MediaAttachmentController } from './aggregations/media-attachments/media-attachment-controller';
-import { MuteController } from './aggregations/mutes/mute-repository';
-import { NotificationsController } from './aggregations/notifications/notification-repository';
-import { PollController } from './aggregations/polls/poll-repository';
-import { PreferenceRepository } from './aggregations/preferences/preferences-repository';
-import { PushController } from './aggregations/push-subscriptions/push-subscription-repository';
-import { ReportRepository } from './aggregations/reports/report-repository';
-import { ScheduledStatusesRepository } from './aggregations/scheduled-statuses/scheduled-statuses-repository';
-import { Status } from './aggregations/statuses/status';
-import { StatusController } from './aggregations/statuses/status-controller';
-import { SuggestionController } from './aggregations/suggestions/suggestion-controller';
-import { Tag } from './aggregations/tag/tag';
-import { TimelinesController } from './aggregations/timelines/timelines-controller';
-import { TrendRepository } from './aggregations/trends/trend-repository';
+import {
+  AccountRepository,
+  AnnouncementRepository,
+  AppRepository,
+  BlockRepository,
+  BookmarkRepository,
+  ConversationRepository,
+  CustomEmojiRepository,
+  DomainBlockRepository,
+  EndorsementRepository,
+  FavouriteRepository,
+  FeaturedTagRepository,
+  FilterRepository,
+  FollowRequestRepository,
+  InstanceRepository,
+  ListRepository,
+  MarkerRepository,
+  MediaAttachmentRepository,
+  MuteRepository,
+  NotificationsRepository,
+  PollRepository,
+  PreferenceRepository,
+  PushSubscriptionsRepository,
+  ReportRepository,
+  ScheduledStatusesRepository,
+  StatusRepository,
+  SuggestionRepository,
+  TimelinesRepository,
+  TrendRepository,
+} from './aggregations';
+import { DirectoryRepository } from './aggregations/directory';
 import { version } from './decorators';
+import { Results } from './entities';
 import { Http } from './http';
 import { Paginator } from './paginator';
+import { DefaultPaginationParams } from './repository';
 
 export type SearchType = 'accounts' | 'hashtags' | 'statuses';
 
-export interface SearchParams extends PaginationParams {
+export interface SearchParams extends DefaultPaginationParams {
   /** Attempt WebFinger lookup. Defaults to false. */
   readonly q: string;
   /** Enum(accounts, hashtags, statuses) */
@@ -51,65 +52,83 @@ export interface SearchParams extends PaginationParams {
   readonly following?: boolean | null;
 }
 
-/**
- * Represents the results of a search.
- * @see https://docs.joinmastodon.org/entities/results/
- */
-export interface Results {
-  /** Accounts which match the given query */
-  accounts: Account[];
-  /** Statuses which match the given query */
-  statuses: Status[];
-  /** Hashtags which match the given query */
-  hashtags: Tag[];
-}
-
-class Masto {
+export class FacadeRepositories {
   static async login() {
     const http = ({} as unknown) as Http;
     const version = '1.0.0';
-    return new Masto(http, version);
+    return new FacadeRepositories(http, version);
   }
 
   private constructor(readonly http: Http, readonly version: string) {}
 
-  readonly accounts = new AccountController(this.http, this.version);
+  readonly accounts = new AccountRepository(this.http, this.version);
+
   readonly announcements = new AnnouncementRepository(this.http, this.version);
-  readonly apps = new AppController(this.http, this.version);
-  readonly blocks = new BlockController(this.http, this.version);
-  readonly bookmarks = new BookmarkController(this.http, this.version);
+
+  readonly apps = new AppRepository(this.http, this.version);
+
+  readonly blocks = new BlockRepository(this.http, this.version);
+
+  readonly bookmarks = new BookmarkRepository(this.http, this.version);
+
   readonly conversations = new ConversationRepository(this.http, this.version);
-  readonly customEmojis = new CustomEmojiController(this.http, this.version);
+
+  readonly customEmojis = new CustomEmojiRepository(this.http, this.version);
+
   readonly directory = new DirectoryRepository(this.http, this.version);
-  readonly domainBlocks = new DomainBlockController(this.http, this.version);
-  readonly endorsements = new EndorsementsController(this.http, this.version);
-  readonly favourites = new FavouritesController(this.http, this.version);
+
+  readonly domainBlocks = new DomainBlockRepository(this.http, this.version);
+
+  readonly endorsements = new EndorsementRepository(this.http, this.version);
+
+  readonly favourites = new FavouriteRepository(this.http, this.version);
+
   readonly featuredTags = new FeaturedTagRepository(this.http, this.version);
-  readonly filters = new FilterController(this.http, this.version);
-  readonly followRequests = new FollowRequestController(
+
+  readonly filters = new FilterRepository(this.http, this.version);
+
+  readonly followRequests = new FollowRequestRepository(
     this.http,
     this.version,
   );
-  readonly instances = new InstanceController(this.http, this.version);
-  readonly lists = new ListController(this.http, this.version);
+
+  readonly instances = new InstanceRepository(this.http, this.version);
+
+  readonly lists = new ListRepository(this.http, this.version);
+
   readonly markers = new MarkerRepository(this.http, this.version);
-  readonly mediaAttachments = new MediaAttachmentController(
+
+  readonly mediaAttachments = new MediaAttachmentRepository(
     this.http,
     this.version,
   );
-  readonly mutes = new MuteController(this.http, this.version);
-  readonly notifications = new NotificationsController(this.http, this.version);
-  readonly poll = new PollController(this.http, this.version);
+
+  readonly mutes = new MuteRepository(this.http, this.version);
+
+  readonly notifications = new NotificationsRepository(this.http, this.version);
+
+  readonly poll = new PollRepository(this.http, this.version);
+
   readonly preferences = new PreferenceRepository(this.http, this.version);
-  readonly push = new PushController(this.http, this.version);
+
+  readonly pushSubscriptions = new PushSubscriptionsRepository(
+    this.http,
+    this.version,
+  );
+
   readonly reports = new ReportRepository(this.http, this.version);
+
   readonly scheduledStatuses = new ScheduledStatusesRepository(
     this.http,
     this.version,
   );
-  readonly statuses = new StatusController(this.http, this.version);
-  readonly suggestions = new SuggestionController(this.http, this.version);
-  readonly timelines = new TimelinesController(this.http, this.version);
+
+  readonly statuses = new StatusRepository(this.http, this.version);
+
+  readonly suggestions = new SuggestionRepository(this.http, this.version);
+
+  readonly timelines = new TimelinesRepository(this.http, this.version);
+
   readonly trends = new TrendRepository(this.http, this.version);
 
   /**
@@ -119,7 +138,7 @@ class Masto {
    * @see https://docs.joinmastodon.org/methods/search/
    */
   @version({ since: '2.4.1' })
-  search(params: SearchParams) {
+  search(params: SearchParams): AsyncIterable<Results> {
     return new Paginator<typeof params, Results>(
       this.http,
       `/api/v2/search`,
@@ -127,8 +146,3 @@ class Masto {
     );
   }
 }
-
-const main = async () => {
-  const masto = await Masto.login();
-  const prefe = await masto.preferences.fetch();
-};

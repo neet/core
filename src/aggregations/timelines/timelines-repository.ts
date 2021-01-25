@@ -1,17 +1,26 @@
 import { deprecated, version } from '../../decorators';
+import { Status } from '../../entities';
 import { Http } from '../../http';
 import { Paginator } from '../../paginator';
-import { Status } from '../statuses/status';
-import { FetchTimelineParams } from './timeline-params';
+import { DefaultPaginationParams } from '../../repository';
 
-export class TimelinesController {
+export interface FetchTimelineParams extends DefaultPaginationParams {
+  /** Show only local statuses? Defaults to false. */
+  readonly local?: boolean | null;
+  /** Show only statuses with media attached? Defaults to false. */
+  readonly onlyMedia?: boolean | null;
+  /** Remote only */
+  readonly remote?: boolean | null;
+}
+
+export class TimelinesRepository {
   readonly home: AsyncIterable<Status[]>;
   readonly public: AsyncIterable<Status[]>;
   readonly direct: AsyncIterable<Status[]>;
 
   constructor(private readonly http: Http, readonly version: string) {
-    this.home = this.getHome();
-    this.public = this.getPublic();
+    this.home = this.getHomeIterable();
+    this.public = this.getPublicIterable();
     this.direct = this.getDirect();
   }
 
@@ -22,7 +31,7 @@ export class TimelinesController {
    * @see https://docs.joinmastodon.org/methods/timelines/
    */
   @version({ since: '0.0.0' })
-  getHome(params?: FetchTimelineParams) {
+  getHomeIterable(params?: FetchTimelineParams): AsyncIterable<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       '/api/v1/timelines/home',
@@ -37,7 +46,7 @@ export class TimelinesController {
    * @see https://docs.joinmastodon.org/methods/timelines/
    */
   @version({ since: '0.0.0' })
-  getPublic(params?: FetchTimelineParams) {
+  getPublicIterable(params?: FetchTimelineParams): AsyncIterable<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       '/api/v1/timelines/public',
@@ -53,7 +62,10 @@ export class TimelinesController {
    * @see https://docs.joinmastodon.org/methods/timelines/
    */
   @version({ since: '0.0.0' })
-  getTag(hashtag: string, params?: FetchTimelineParams) {
+  getTagIterable(
+    hashtag: string,
+    params?: FetchTimelineParams,
+  ): AsyncIterable<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       `/api/v1/timelines/tag/${hashtag}`,
@@ -69,7 +81,7 @@ export class TimelinesController {
    * @see https://docs.joinmastodon.org/methods/timelines/
    */
   @version({ since: '2.1.0' })
-  getList(id: string, params?: FetchTimelineParams) {
+  getList(id: string, params?: FetchTimelineParams): AsyncIterable<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       `/api/v1/timelines/list/${id}`,
@@ -85,7 +97,7 @@ export class TimelinesController {
    */
   @deprecated('Use conversations API instead')
   @version({ since: '0.0.0', until: '2.9.3' })
-  getDirect(params?: FetchTimelineParams) {
+  getDirect(params?: FetchTimelineParams): AsyncIterable<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       '/api/v1/timelines/direct',
