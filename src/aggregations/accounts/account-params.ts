@@ -1,5 +1,5 @@
-import { Field } from './field';
-import { Source } from './source';
+import type { Field, Source } from '../../entities';
+import { DefaultPaginationParams } from '../../repository';
 
 export interface CreateAccountParams {
   /** The desired username for the account */
@@ -50,18 +50,7 @@ export interface CreateAccountNoteParams {
   readonly comment: string;
 }
 
-export interface PaginationParams {
-  /** **Internal parameter.** Use HTTP Link header from response for pagination. */
-  readonly maxId?: string | null;
-  /** **Internal parameter.** Use HTTP Link header from response for pagination. */
-  readonly sinceId?: string | null;
-  /** Get a list of items with ID greater than this value excluding this ID */
-  readonly minId?: string | null;
-  /** Maximum number of results to return per page. Defaults to 40. NOTE: Pagination is done with the Link header from the response. */
-  readonly limit?: number | null;
-}
-
-export interface FetchAccountStatusesParams extends PaginationParams {
+export interface FetchAccountStatusesParams extends DefaultPaginationParams {
   /** Only return statuses that have media attachments */
   readonly onlyMedia?: boolean | null;
   /** Only return statuses that have been pinned */

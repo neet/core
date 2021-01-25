@@ -1048,6 +1048,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Report
    * @see https://docs.joinmastodon.org/methods/accounts/reports/
+   * @done
    */
   @available({ since: '1.1.0' })
   reportAccount(params: ReportAccountParams) {
@@ -1059,6 +1060,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of ScheduledStatus
    * @see https://docs.joinmastodon.org/methods/statuses/scheduled_statuses/
+   * @done
    */
   @available({ since: '2.7.0' })
   fetchScheduledStatuses(params?: PaginationParams) {
@@ -1073,6 +1075,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the scheduled status in the database.
    * @return ScheduledStatus
    * @see https://docs.joinmastodon.org/methods/statuses/scheduled_statuses/
+   * @done
    */
   @available({ since: '2.7.0' })
   fetchScheduledStatus(id: string) {
@@ -1085,6 +1088,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return ScheduledStatus
    * @see https://docs.joinmastodon.org/api/rest/scheduled-statuses/#put-api-v1-scheduled-statuses-id
+   * @done
    */
   @available({ since: '2.7.0' })
   updateScheduledStatus(id: string, params: UpdateScheduledStatusParams) {
@@ -1099,6 +1103,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the scheduled status in the database.
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/statuses/scheduled_statuses/
+   * @done
    */
   @available({ since: '2.7.0' })
   removeScheduledStatus(id: string) {
@@ -1110,6 +1115,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Results
    * @see https://docs.joinmastodon.org/methods/search/
+   * @done
    */
   @available({ since: '0.0.0' })
   search(params: SearchParams) {
@@ -1374,6 +1380,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Conversation
    * @see https://docs.joinmastodon.org/methods/timelines/conversations/
+   * @done
    */
   @available({ since: '2.6.0' })
   fetchConversations(params?: PaginationParams) {
@@ -1388,6 +1395,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the conversation in the database
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/timelines/conversations/
+   * @done
    */
   @available({ since: '2.6.0' })
   removeConversation(id: string) {
@@ -1399,6 +1407,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the conversation in the database
    * @return Conversation
    * @see https://docs.joinmastodon.org/methods/timelines/conversations/
+   * @done
    */
   @available({ since: '2.6.0' })
   readConversation(id: string) {
@@ -1420,6 +1429,7 @@ export class Masto extends GatewayImpl {
    * Preferences defined by the user in their account settings.
    * @return Preferences by key and value
    * @see https://docs.joinmastodon.org/methods/accounts/preferences/
+   * @done
    */
   @available({ since: '2.8.0' })
   fetchPreferences() {
@@ -1430,6 +1440,7 @@ export class Masto extends GatewayImpl {
    * Tags that are being used more frequently within the past week.
    * @param params Parameters
    * @return Array of Tag with History
+   * @done
    * @see https://docs.joinmastodon.org/methods/instance/trends/
    */
   @available({ since: '3.0.0' })
@@ -1442,6 +1453,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Markers
    * @see https://docs.joinmastodon.org/methods/timelines/markers/
+   * @done
    */
   @available({ since: '3.0.0' })
   fetchMarkers(params?: FetchMarkersParams) {
@@ -1453,6 +1465,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Markers
    * @see https://github.com/tootsuite/mastodon/pull/11762
+   * @done
    */
   @available({ since: '3.0.0' })
   createMarkers(params: CreateMarkersParams) {
@@ -1463,6 +1476,7 @@ export class Masto extends GatewayImpl {
    * View your featured tags
    * @return Array of FeaturedTag
    * @see https://docs.joinmastodon.org/methods/accounts/featured_tags/
+   * @done
    */
   @available({ since: '3.0.0' })
   fetchFeaturedTags() {
@@ -1474,6 +1488,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return FeaturedTag
    * @see https://docs.joinmastodon.org/methods/accounts/featured_tags/
+   * @done
    */
   @available({ since: '3.0.0' })
   createFeaturedTag(params: CreateFeaturedTagParams) {
@@ -1484,6 +1499,7 @@ export class Masto extends GatewayImpl {
    * Shows your 10 most-used tags, with usage history for the past week.
    * @return Array of Tag with History
    * @see https://docs.joinmastodon.org/methods/accounts/featured_tags/
+   * @done
    */
   @available({ since: '3.0.0' })
   fetchSuggestedFeaturedTags() {
@@ -1495,6 +1511,7 @@ export class Masto extends GatewayImpl {
    * @param id The id of the FeaturedTag to be un-featured
    * @return N/A
    * @see https://docs.joinmastodon.org/methods/accounts/featured_tags/
+   * @done
    */
   @available({ since: '3.0.0' })
   removeFeaturedTag(id: string) {
@@ -1506,6 +1523,7 @@ export class Masto extends GatewayImpl {
    * @param params Parameters
    * @return Array of Account
    * @see https://docs.joinmastodon.org/methods/instance/directory/
+   * @done
    */
   @available({ since: '3.0.0' })
   fetchDirectory(params?: FetchDirectoryParams) {
@@ -1515,6 +1533,7 @@ export class Masto extends GatewayImpl {
   /**
    * Fetch announcements
    * @return Announcements
+   * @done
    */
   @available({ since: '3.1.0' })
   fetchAnnouncements() {
@@ -1525,6 +1544,7 @@ export class Masto extends GatewayImpl {
    * Dismiss announcement
    * @param id ID of the announcement
    * @return Nothing
+   * @done
    */
   @available({ since: '3.1.0' })
   dismissAnnouncement(id: string) {
@@ -1536,6 +1556,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the announcement
    * @param name Emoji string
    * @return Announcement
+   * @done
    */
   @available({ since: '3.1.0' })
   addReactionToAnnouncement(id: string, name: string) {
@@ -1547,6 +1568,7 @@ export class Masto extends GatewayImpl {
    * @param id ID of the announcement
    * @param name Emoji string
    * @return Announcement
+   * @done
    */
   @available({ since: '3.1.0' })
   removeReactionFromAnnouncement(id: string, name: string) {
