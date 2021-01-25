@@ -37,10 +37,10 @@ export class Paginator<Params, Result> implements AsyncIterable<Result> {
     let nextParams = this.params;
 
     while (nextUrl) {
-      const response: any = await this.http.get(nextUrl, nextParams);
+      const response: any = await this.http.request(nextUrl, nextParams);
 
       // Yield will be argument of next()
-      const params = yield response.data;
+      const params = yield response;
 
       if (params?.reset) {
         nextUrl = this.url;
