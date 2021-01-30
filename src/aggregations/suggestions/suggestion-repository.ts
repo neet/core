@@ -3,28 +3,22 @@ import { Http } from '../../http';
 import { Paginator } from '../../paginator';
 import { DefaultPaginationParams } from '../../repository';
 
-export class SuggestionRepository {
+export class SuggestionRepository implements AsyncIterableIterator<Account[]> {
+  // private readonly paginator: Paginator<DefaultPaginationParams, Account[]>;
+
   constructor(private readonly http: Http, readonly version: string) {}
 
-  async *[Symbol.asyncIterator]() {
-    yield* this.getIterator();
-  }
+  private readonly paginator = new Paginator<
+    DefaultPaginationParams,
+    Account[]
+  >(this.http, '/api/v1/suggestions');
 
-  /**
-   * Accounts the user has had past positive interactions with, but is not yet following.
-   * @param params Parameters
-   * @return Array of Account
-   * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
-   */
-  @version({ since: '2.4.3' })
-  getIterator(
-    params?: DefaultPaginationParams,
-  ): AsyncIterableIterator<Account[]> {
-    return new Paginator<typeof params, Account[]>(
-      this.http,
-      '/api/v1/suggestions',
-      params,
-    );
+  readonly next = this.paginator.next;
+  readonly throw = this.paginator.throw;
+  readonly return = this.paginator.return;
+
+  [Symbol.asyncIterator]() {
+    return this;
   }
 
   /**
