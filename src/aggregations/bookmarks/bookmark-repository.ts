@@ -18,7 +18,7 @@ export class BookmarkRepository implements Repository<Status> {
    * @see https://docs.joinmastodon.org/methods/accounts/bookmarks/
    */
   @version({ since: '3.1.0' })
-  getIterator(params?: DefaultPaginationParams): AsyncIterable<Status[]> {
+  getIterator(params?: DefaultPaginationParams): AsyncIterableIterator<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       '/api/v1/bookmarks',

@@ -26,7 +26,7 @@ export class ScheduledStatusesRepository
   @version({ since: '2.7.0' })
   getIterator(
     params?: DefaultPaginationParams,
-  ): AsyncIterable<ScheduledStatus[]> {
+  ): AsyncIterableIterator<ScheduledStatus[]> {
     return new Paginator<typeof params, ScheduledStatus[]>(
       this.http,
       '/api/v1/scheduled_statuses',

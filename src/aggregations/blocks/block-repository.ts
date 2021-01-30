@@ -18,7 +18,9 @@ export class BlockRepository implements Repository<Account> {
    * @see https://docs.joinmastodon.org/methods/accounts/blocks/
    */
   @version({ since: '0.0.0' })
-  getIterator(params?: DefaultPaginationParams): AsyncIterable<Account[]> {
+  getIterator(
+    params?: DefaultPaginationParams,
+  ): AsyncIterableIterator<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
       `/api/v1/blocks`,

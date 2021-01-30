@@ -1,59 +1,61 @@
 import { Http } from './http';
 import { Response } from './http/http';
 
-/**
- * Argument of `Gateway.paginate().next()`.
- * When reset = true specified, other params won't be accepted
- */
-export type NextParams<Params> =
-  | {
-      reset: boolean;
-      url?: undefined;
-      params?: undefined;
-    }
-  | {
-      reset?: undefined;
-      url?: string;
-      params?: Params;
-    };
+// type PaginatorOverrideNext<T> = {
+//   readonly params?: T;
+//   readonly urL?: string;
+// };
 
-export class Paginator<Params, Result> implements AsyncIterable<Result> {
+// type PaginatorResetNext = {
+//   readonly reset: true;
+// };
+
+// export type PaginatorNext<T> = PaginatorOverrideNext<T> | PaginatorResetNext;
+
+export class Paginator<Params, Result>
+  implements AsyncIterableIterator<Result> {
+  private nextUrl?: string;
+  private nextParams?: Params;
+
   constructor(
     private readonly http: Http,
-    private readonly url: string,
-    private readonly params?: Params,
-  ) {}
+    readonly initialUrl: string,
+    readonly initialParams?: Params,
+  ) {
+    this.nextUrl = initialUrl;
+    this.nextParams = initialParams;
+  }
 
   private pluckNext = (link: string) => {
     return link?.match(/<(.+?)>; rel="next"/)?.[1];
   };
 
-  // stub
-  async *[Symbol.asyncIterator](): AsyncGenerator<
-    Result,
-    void,
-    NextParams<Params> | undefined
-  > {
-    let nextUrl: string | undefined = this.url;
-    let nextParams = this.params;
+  async next(): Promise<IteratorResult<Result>> {
+    const response: Response<Result> = await this.http.request({
+      path: this.nextUrl,
+      body: this.nextParams,
+    });
 
-    while (nextUrl) {
-      const response: Response<Result> = await this.http.request({
-        path: nextUrl,
-        body: nextParams,
-      });
+    this.nextUrl = this.pluckNext(response.headers?.link as string);
 
-      // Yield will be argument of next()
-      const params = yield response.data;
+    return {
+      done: this.nextUrl != null,
+      value: response.data,
+    };
+  }
 
-      if (params?.reset) {
-        nextUrl = this.url;
-        nextParams = this.params;
-        continue;
-      }
+  async return<T, U>(value: U | Promise<U>): Promise<IteratorResult<T, U>> {
+    return {
+      done: true,
+      value: await value,
+    };
+  }
 
-      nextUrl = params?.url ?? this.pluckNext(response.headers?.link as string);
-      nextParams = params?.params;
-    }
+  async throw<T, U>(e: unknown): Promise<IteratorResult<T, U>> {
+    throw e;
+  }
+
+  [Symbol.asyncIterator](): AsyncGenerator<Result, undefined, undefined> {
+    return this;
   }
 }

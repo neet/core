@@ -17,7 +17,9 @@ export class SuggestionRepository {
    * @see https://docs.joinmastodon.org/methods/accounts/suggestions/
    */
   @version({ since: '2.4.3' })
-  getIterator(params?: DefaultPaginationParams): AsyncIterable<Account[]> {
+  getIterator(
+    params?: DefaultPaginationParams,
+  ): AsyncIterableIterator<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
       '/api/v1/suggestions',

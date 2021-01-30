@@ -85,7 +85,7 @@ export class AccountRepository
   getFollowersIterable(
     id: string,
     params: DefaultPaginationParams,
-  ): AsyncIterable<Account[]> {
+  ): AsyncIterableIterator<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
       `/api/v1/accounts/${id}/followers`,
@@ -104,7 +104,7 @@ export class AccountRepository
   getFollowingIterable(
     id: string,
     params: DefaultPaginationParams,
-  ): AsyncIterable<Account[]> {
+  ): AsyncIterableIterator<Account[]> {
     return new Paginator<typeof params, Account[]>(
       this.http,
       `/api/v1/accounts/${id}/following`,
@@ -123,7 +123,7 @@ export class AccountRepository
   getStatusesIterable(
     id: string,
     params: FetchAccountStatusesParams,
-  ): AsyncIterable<Status[]> {
+  ): AsyncIterableIterator<Status[]> {
     return new Paginator<typeof params, Status[]>(
       this.http,
       `/api/v1/accounts/${id}/statuses`,
