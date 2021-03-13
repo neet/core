@@ -18,7 +18,10 @@ export const deprecated = (message: string) => (
     this: unknown,
     ...args: Parameters<typeof original>
   ) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (
+      process.env.NODE_ENV !== 'production' ||
+      process.env.MASTO_IGNORE_WARNING
+    ) {
       // eslint-disable-next-line no-console
       console.warn(`#${name.toString()} is deprecated. ${message}`);
     }

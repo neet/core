@@ -1,3 +1,8 @@
+import { version } from './decorators';
+import { Results } from './entities';
+import { Http } from './http';
+import { HttpAxiosImpl } from './http/http-axios-impl';
+import { Paginator } from './paginator';
 import {
   AccountRepository,
   AnnouncementRepository,
@@ -6,6 +11,7 @@ import {
   BookmarkRepository,
   ConversationRepository,
   CustomEmojiRepository,
+  DirectoryRepository,
   DomainBlockRepository,
   EndorsementRepository,
   FavouriteRepository,
@@ -27,13 +33,7 @@ import {
   SuggestionRepository,
   TimelinesRepository,
   TrendRepository,
-} from './aggregations';
-import { DirectoryRepository } from './aggregations/directory';
-import { version } from './decorators';
-import { Results } from './entities';
-import { Http } from './http';
-import { HttpAxiosImpl } from './http/http-axios-impl';
-import { Paginator } from './paginator';
+} from './repositories';
 import { DefaultPaginationParams } from './repository';
 import { SerializerImpl } from './serializers';
 
